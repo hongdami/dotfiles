@@ -3,8 +3,8 @@
 	editor = nvim
         gitProxy = git-proxy
 [user]
-	name = Xin Zhang
-	email = zhangxin.xa@gmail.com
+	name = Miao Hongda
+	email = hongda.miao@intel.com
 [push]
 	default = simple
 [pull]
