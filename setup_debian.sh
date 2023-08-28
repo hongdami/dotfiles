@@ -1,23 +1,29 @@
 #!/bin/bash
 
+set -e
+
 echo "=== Install necessary packages ==="
 sudo -E apt-get update
 sudo -E apt-get install -y \
-            aptitude openssh-server git tmux zsh htop curl wget rsync socat ranger trash-cli xclip \
-            build-essential gdb cmake cmake-curses-gui clang-format cloc unzip python3-pip \
-            libfuse2 command-not-found lsb-release
+            aptitude openssh-server git tmux zsh htop curl wget rsync socat ranger trash-cli wl-clipboard \
+            build-essential gdb cmake cmake-curses-gui clang-format cloc unzip \
+            fuse3 command-not-found lsb-release
 
-sudo apt-file update && sudo update-command-not-found
+sudo -E apt-file update && sudo -E update-command-not-found
 
 echo "=== Setup GDB ==="
 wget https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit -O ~/.gdbinit
-mkdir ~/.gdbinit.d
+mkdir -p ~/.gdbinit.d
 cp $(dirname "$0")/gdb_dashboard ~/.gdbinit.d/dashboard
 
 echo "=== Setup oh-my-zsh ==="
 sh -c "CHSH=no RUNZSH=no $(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
-git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+if [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]; then
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+fi
+if [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k ]; then
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+fi
 
 echo "=== Copy config files ==="
 mkdir -p ~/.config/nvim
@@ -41,7 +47,6 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 ~/.local/bin/nvim +PlugInstall +qall
 cp $(dirname "$0")/init.lua ~/.config/nvim/init.lua
-python3 -m pip install --user neovim-remote
 
 echo "=== Setup rust and tools from cargo ==="
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > sh.rustup.rs
