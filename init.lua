@@ -147,7 +147,7 @@ local function open_nvim_tree(data)
   require("nvim-tree.api").tree.toggle({ focus = false, find_file = true, })
 end
 -- Open nvim-tree when open nvim using the function above
-vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
+-- vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
 
 -- startify
 -------------------------------------------------------------------------------
@@ -233,8 +233,7 @@ cmp.setup.cmdline(':', {
 -------------------------------------------------------------------------------
 local servers = {
   "clangd",
-  "neocmake",
-  "rust_analyzer",
+  "pyright",
 }
 
 require("mason").setup()
@@ -335,3 +334,9 @@ require("bufferline").setup {
     },
   }
 }
+
+-- use vim config
+vim.cmd([[
+    set runtimepath^=~/.vim
+]]
+)
