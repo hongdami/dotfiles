@@ -13,6 +13,9 @@ sudo -E apt-get install -y \
 
 sudo -E apt-file update && sudo -E update-command-not-found
 
+echo "=== Setup CMake ==="
+wget -qO- "https://cmake.org/files/v3.27/cmake-3.27.0-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C ~/.local
+
 echo "=== Setup GDB ==="
 wget https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit -O ~/.gdbinit
 mkdir -p ~/.gdbinit.d
